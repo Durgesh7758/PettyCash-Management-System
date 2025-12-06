@@ -1,0 +1,117 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .stat-card {
+        border-radius: 18px;
+        padding: 22px;
+        color: #fff;
+        box-shadow: 0 6px 16px rgba(0,0,0,0.15);
+        transition: 0.2s;
+    }
+    .stat-card:hover {
+        transform: translateY(-4px);
+        box-shadow: 0 10px 22px rgba(0,0,0,0.2);
+    }
+    .income-card {
+        background: linear-gradient(135deg, #4CAF50, #2E7D32);
+    }
+    .expense-card {
+        background: linear-gradient(135deg, #F44336, #C62828);
+    }
+    .balance-card {
+        background: linear-gradient(135deg, #2196F3, #1565C0);
+    }
+    .recent-box {
+        border-radius: 14px;
+        background: #fff;
+        padding: 20px;
+        box-shadow: 0 4px 14px rgba(0,0,0,0.08);
+    }
+    th {
+        font-weight: 600;
+    }
+</style>
+
+<h3 class="fw-bold mb-3">📊 Dashboard</h3>
+
+<div class="row g-4">
+
+  <div class="col-md-4">
+    <div class="stat-card income-card">
+      <h6 class="text-light mb-1">Total Income</h6>
+      <h2 class="fw-bold">₹ {{ total_income }}</h2>
+      <small>💰 Money Received</small>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="stat-card expense-card">
+      <h6 class="text-light mb-1">Total Expense</h6>
+      <h2 class="fw-bold">₹ {{ total_expense }}</h2>
+      <small>📉 Money Spent</small>
+    </div>
+  </div>
+
+  <div class="col-md-4">
+    <div class="stat-card balance-card">
+      <h6 class="text-light mb-1">Current Balance</h6>
+      <h2 class="fw-bold">₹ {{ balance }}</h2>
+      <small>💼 Remaining Amount</small>
+    </div>
+  </div>
+
+</div>
+
+<!-- Recent Transactions Section -->
+<div class="recent-box mt-5">
+    <h5 class="fw-bold mb-3">🧾 Recent Transactions</h5>
+
+    <div class="table-responsive">
+        <table class="table table-hover align-middle">
+            <thead class="table-light">
+                <tr>
+                    <th>Date</th>
+                    <th>Type</th>
+                    <th>Party</th>
+                    <th>Amount</th>
+                </tr>
+            </thead>
+
+            <tbody>
+                {% for t in recent_txns %}
+                <tr>
+                    <td>{{ t.date }}</td>
+
+                    <td>
+                        {% if t.txn_type == 'IN' %}
+                          <span class="badge bg-success">Income</span>
+                        {% else %}
+                          <span class="badge bg-danger">Expense</span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        {% if t.party %}
+                            {{ t.party.name }}
+                        {% else %}
+                            -
+                        {% endif %}
+                    </td>
+
+                    <td class="fw-semibold">
+                        ₹ {{ t.amount }}
+                    </td>
+                </tr>
+
+                {% empty %}
+                <tr>
+                    <td colspan="4" class="text-center">No transactions yet.</td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+</div>
+
+{% endblock %}

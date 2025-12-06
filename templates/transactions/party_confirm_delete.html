@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block content %}
+<h4>Delete Party</h4>
+<p>Are you sure you want to delete party: <strong>{{ party.name }}</strong> ?</p>
+<form method="post">
+  {% csrf_token %}
+  <button class="btn btn-danger">Yes, delete</button>
+  <a class="btn btn-secondary" href="{% url 'transactions:party_list' %}">Cancel</a>
+</form>
+{% endblock %}

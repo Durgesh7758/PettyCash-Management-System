@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<div class="container">
+  <div class="row justify-content-center">
+    <div class="col-lg-8 col-md-10">
+
+      <div class="card shadow-sm p-4 mt-3" style="border-radius: 12px;">
+        <h4 class="mb-3 text-center">
+          {% if edit %}Edit Transaction{% else %}Add Transaction{% endif %}
+        </h4>
+
+        <form method="post" enctype="multipart/form-data" id="txnForm">
+          {% csrf_token %}
+
+          <div class="row g-3">
+
+            <!-- Transaction Type -->
+            <div class="col-md-6">
+              <label class="form-label">Type <span class="text-danger">*</span></label>
+              <select name="txn_type" class="form-select" required>
+                <option value="IN" {% if form.initial.txn_type == "IN" %}selected{% endif %}>Income</option>
+                <option value="OUT" {% if form.initial.txn_type == "OUT" %}selected{% endif %}>Expense</option>
+              </select>
+            </div>
+
+            <!-- Amount -->
+            <div class="col-md-6">
+              <label class="form-label">Amount <span class="text-danger">*</span></label>
+              <input type="number" name="amount" min="1" step="0.01"
+                     class="form-control" value="{{ form.amount.value|default_if_none:'' }}"
+                     placeholder="Enter amount" required>
+              <small class="text-muted">Enter minimum ₹1</small>
+            </div>
+
+            <!-- Date -->
+            <div class="col-md-6">
+              <label class="form-label">Date <span class="text-danger">*</span></label>
+              <input type="date" name="date" class="form-control"
+                     value="{{ form.date.value|default:'' }}" required>
+            </div>
+
+            <!-- Party -->
+            <div class="col-md-6">
+              <label class="form-label">Party (Optional)</label>
+              <select name="party" class="form-select">
+                <option value="">-- Select Party --</option>
+                {% for p in form.fields.party.queryset %}
+                  <option value="{{ p.id }}"
+                    {% if form.instance.party and form.instance.party.id == p.id %}selected{% endif %}>
+                    {{ p.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Category -->
+            <div class="col-md-6">
+              <label class="form-label">Category</label>
+              <select name="category" class="form-select">
+                <option value="">-- Select Category --</option>
+                {% for c in form.fields.category.queryset %}
+                  <option value="{{ c.id }}"
+                    {% if form.instance.category and form.instance.category.id == c.id %}selected{% endif %}>
+                    {{ c.name }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+            
+
+            <!-- Payment Mode -->
+            <div class="col-md-12">
+              <label class="form-label">Payment Mode <span class="text-danger">*</span></label>
+              <select name="payment_mode" class="form-select" required>
+                {% for val, label in form.fields.payment_mode.choices %}
+                  <option value="{{ val }}"
+                    {% if form.instance.payment_mode == val %}selected{% endif %}>
+                    {{ label }}
+                  </option>
+                {% endfor %}
+              </select>
+            </div>
+
+            <!-- Description -->
+            <div class="col-md-12">
+              <label class="form-label">Description</label>
+              <textarea name="description" class="form-control" rows="3"
+                        placeholder="Enter notes (optional)">{{ form.description.value|default:'' }}</textarea>
+            </div>
+
+            <!-- Attachment -->
+            <div class="col-md-12">
+              <label class="form-label">Attachment (Bill/Receipt)</label>
+              <input type="file" name="attachment" class="form-control">
+
+              {% if form.instance.attachment %}
+                <small class="mt-1 d-block">
+                  Current: <a href="{{ form.instance.attachment.url }}" target="_blank">View File</a>
+                </small>
+              {% endif %}
+            </div>
+
+            <!-- Buttons -->
+            <div class="col-12 text-center mt-3">
+              <button class="btn btn-primary px-4">
+                {% if edit %}Update{% else %}Save{% endif %}
+              </button>
+              <a href="{% url 'transactions:transaction_list' %}"
+                 class="btn btn-secondary px-4 ms-2">Cancel</a>
+            </div>
+
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- Client-side validation -->
+<script>
+document.getElementById("txnForm").addEventListener("submit", function(e) {
+    let amount = document.querySelector("input[name='amount']").value;
+    let date = document.querySelector("input[name='date']").value;
+
+    if (amount <= 0) {
+        alert("Amount must be greater than zero.");
+        e.preventDefault();
+    }
+
+    if (!date) {
+        alert("Please select a valid date.");
+        e.preventDefault();
+    }
+});
+</script>
+
+{% endblock %}

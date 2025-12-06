@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="text-center">
+
+    <h1 class="mb-4">Welcome to PettyCash</h1>
+
+    <a href="{% url 'transactions:transaction_list' %}" class="btn btn-primary btn-lg">
+        Go to Transactions
+    </a>
+
+</div>
+{% endblock %}

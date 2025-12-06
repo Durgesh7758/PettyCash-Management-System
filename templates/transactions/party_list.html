@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="d-flex justify-content-between">
+  <h4>Parties</h4>
+  <a href="{% url 'transactions:party_add' %}" class="btn btn-primary">Add Party</a>
+</div>
+<table class="table mt-3">
+  <thead><tr><th>Name</th><th>Phone</th><th>Email</th><th>Actions</th></tr></thead>
+  <tbody>
+    {% for p in parties %}
+    <tr>
+      <td>{{ p.name }}</td>
+      <td>{{ p.phone }}</td>
+      <td>{{ p.email }}</td>
+      <td>
+        <a href="{% url 'transactions:party_edit' p.pk %}" class="btn btn-sm btn-outline-primary">Edit</a>
+        <a href="{% url 'transactions:party_delete' p.pk %}" class="btn btn-sm btn-outline-danger">Delete</a>
+      </td>
+    </tr>
+    {% empty %}
+    <tr><td colspan="4">No parties yet.</td></tr>
+    {% endfor %}
+  </tbody>
+</table>
+{% endblock %}

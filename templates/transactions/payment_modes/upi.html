@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+
+{% block title %}UPI Transactions{% endblock %}
+
+{% block content %}
+<h2>UPI Transactions</h2>
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Date</th>
+            <th>Party</th>
+            <th>Amount</th>
+            <th>Remarks</th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for txn in transactions %}
+        <tr>
+            <td>{{ txn.date }}</td>
+            <td>{{ txn.party.name }}</td>
+            <td>{{ txn.amount }}</td>
+            <td>{{ txn.remarks }}</td>
+        </tr>
+        {% empty %}
+        <tr>
+            <td colspan="4" class="text-center">No UPI transactions yet.</td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% endblock %}

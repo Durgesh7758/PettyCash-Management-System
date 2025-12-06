@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 80vh;">
+  <div class="card shadow p-4" style="width: 380px; border-radius: 10px;">
+
+    <h4 class="text-center mb-3">Login</h4>
+
+    {% if form.errors %}
+      <div class="alert alert-danger">Invalid username or password.</div>
+    {% endif %}
+
+    <form method="POST" action="">
+      {% csrf_token %}
+
+      <div class="mb-3">
+        <label class="form-label">Username</label>
+        <input type="text" name="username" class="form-control" placeholder="Enter username" required>
+      </div>
+
+      <div class="mb-3">
+        <label class="form-label">Password</label>
+        <input type="password" name="password" class="form-control" placeholder="Enter password" required>
+      </div>
+
+      <button class="btn btn-primary w-100 mt-2" type="submit">Login</button>
+
+      <p class="text-center mt-3">
+        <a href="{% url 'accounts:password_reset' %}">Forgot Password?</a>
+      </p>
+      <p class="text-center mt-3">
+        Don’t have an account? <a href="{% url 'accounts:signup' %}">Register</a>
+      </p>
+
+
+    </form>
+
+  </div>
+</div>
+
+{% endblock %}

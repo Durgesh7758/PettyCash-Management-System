@@ -1,0 +1,76 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<style>
+    .form-card {
+        background: #fff;
+        border-radius: 14px;
+        padding: 25px;
+        box-shadow: 0 6px 18px rgba(0,0,0,0.12);
+        max-width: 650px;
+        margin: auto;
+        transition: 0.2s;
+    }
+    .form-card:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 10px 24px rgba(0,0,0,0.18);
+    }
+    .form-title {
+        font-weight: 700;
+        margin-bottom: 20px;
+        display: flex;
+        align-items: center;
+        gap: 8px;
+    }
+    .form-label {
+        font-weight: 600;
+    }
+</style>
+
+<div class="form-card mt-4">
+    <h4 class="form-title">
+        {% if edit %}
+            ✏️ Edit Party
+        {% else %}
+            ➕ Add New Party
+        {% endif %}
+    </h4>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <div class="mb-3">
+            <label class="form-label">Party / Vendor Name</label>
+            <input name="name" class="form-control"
+                   placeholder="Enter party or vendor name"
+                   value="{{ form.name.value|default_if_none:'' }}" required>
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Phone Number</label>
+            <input name="phone" class="form-control"
+                   placeholder="Enter phone number"
+                   value="{{ form.phone.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Email</label>
+            <input name="email" class="form-control"
+                   placeholder="Enter email address"
+                   value="{{ form.email.value|default_if_none:'' }}">
+        </div>
+
+        <div class="mb-3">
+            <label class="form-label">Address</label>
+            <textarea name="address" class="form-control" rows="3"
+                      placeholder="Enter full address">{{ form.address.value|default_if_none:'' }}</textarea>
+        </div>
+
+        <div class="d-flex gap-2 mt-4">
+            <button class="btn btn-success px-4">Save</button>
+            <a href="{% url 'transactions:party_list' %}" class="btn btn-secondary px-4">Cancel</a>
+        </div>
+    </form>
+</div>
+
+{% endblock %}

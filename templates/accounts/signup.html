@@ -1,0 +1,92 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+    .auth-card {
+        width: 420px;
+        border-radius: 15px;
+        padding: 30px;
+        background: #ffffff;
+    }
+
+    .auth-card input {
+        border-radius: 8px !important;
+        height: 45px;
+    }
+
+    .form-error {
+        font-size: 13px;
+        color: red;
+        margin-top: -5px;
+        margin-bottom: 8px;
+    }
+
+    .title-text {
+        font-weight: 600;
+        font-size: 24px;
+    }
+</style>
+
+<div class="container d-flex justify-content-center align-items-center" style="min-height: 90vh;">
+
+    <div class="auth-card shadow">
+
+        <h4 class="text-center mb-3 title-text">Create Your Account</h4>
+        <p class="text-center text-muted mb-4">Join our platform and get started</p>
+
+        {% if messages %}
+            {% for msg in messages %}
+                <div class="alert alert-success">{{ msg }}</div>
+            {% endfor %}
+        {% endif %}
+
+        <form method="POST" novalidate>
+            {% csrf_token %}
+
+            <!-- Username -->
+            <label class="form-label">Username</label>
+            <input type="text" name="username" class="form-control" placeholder="Enter username"
+                   value="{{ form.username.value|default:'' }}">
+            {% if form.username.errors %}
+                <div class="form-error">{{ form.username.errors.0 }}</div>
+            {% endif %}
+
+            <!-- Email -->
+            <label class="form-label mt-2">Email</label>
+            <input type="email" name="email" class="form-control" placeholder="Enter email"
+                   value="{{ form.email.value|default:'' }}">
+            {% if form.email.errors %}
+                <div class="form-error">{{ form.email.errors.0 }}</div>
+            {% endif %}
+
+            <!-- Password -->
+            <label class="form-label mt-2">Password</label>
+            <input type="password" name="password1" class="form-control" placeholder="Create password">
+            {% if form.password1.errors %}
+                <div class="form-error">{{ form.password1.errors.0 }}</div>
+            {% endif %}
+
+            <!-- Confirm Password -->
+            <label class="form-label mt-2">Confirm Password</label>
+            <input type="password" name="password2" class="form-control" placeholder="Confirm password">
+            {% if form.password2.errors %}
+                <div class="form-error">{{ form.password2.errors.0 }}</div>
+            {% endif %}
+
+            <button class="btn btn-primary w-100 mt-4 py-2" type="submit">
+                Create Account
+            </button>
+
+            <p class="text-center mt-3">
+                Already have an account?
+                <a href="{% url 'accounts:login' %}" class="text-primary">Login</a>
+            </p>
+        </form>
+
+    </div>
+
+</div>
+
+{% endblock %}
