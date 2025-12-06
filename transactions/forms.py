@@ -4,9 +4,7 @@ import datetime
 from .models import Party, Transaction, Category  # <- Category import kar lo
 from .models import RecurringTransaction
 
-# -------------------------------
-# PARTY FORM
-# -------------------------------
+
 class PartyForm(forms.ModelForm):
     class Meta:
         model = Party
